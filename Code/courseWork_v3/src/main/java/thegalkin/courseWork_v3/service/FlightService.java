@@ -20,6 +20,8 @@ public class FlightService {
     public FlightService(FlightRepo flightRepo) {
         this.flightRepo = flightRepo;
     }
+
+
     public Flux<Flight> listAll(){
         return flightRepo.findAll();
     }
