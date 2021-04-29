@@ -9,7 +9,7 @@ import java.sql.Time;
 
 @Data
 @NoArgsConstructor
-public class Flight {
+public class Flights {
     @Id
     private Long id;
     private String flightName;
@@ -120,7 +120,7 @@ public class Flight {
         this.passengersAmount = passengersAmount;
     }
 
-    public Flight(Long id, String flightName, String planeId, String prevFlightName, Time startTime, Time endTime, String planeModel, String startCountry, String endCountry, String startCity, String endCity, Integer passengersAmount) {
+    public Flights(Long id, String flightName, String planeId, String prevFlightName, Time startTime, Time endTime, String planeModel, String startCountry, String endCountry, String startCity, String endCity, Integer passengersAmount) {
         this.id = id;
         this.flightName = flightName;
         this.planeId = planeId;

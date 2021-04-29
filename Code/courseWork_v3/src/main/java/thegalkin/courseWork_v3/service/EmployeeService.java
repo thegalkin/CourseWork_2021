@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import thegalkin.courseWork_v3.domain.Employee;
+import thegalkin.courseWork_v3.domain.Employees;
 import thegalkin.courseWork_v3.repo.EmployeeRepo;
 
 @Service
@@ -17,25 +17,25 @@ public class EmployeeService {
         this.employeeRepo = employeeRepo;
     }
 
-    public Mono<Employee> addNew(Employee employee){
+    public Mono<Employees> addNew(Employees employee){
         return employeeRepo.save(employee);
     }
 
-    public Flux<Employee> listAll(){
+    public Flux<Employees> listAll(){
         return employeeRepo.findAll();
     }
 
-    public Mono<Employee> getById(Long id){
+    public Mono<Employees> getById(Long id){
         return employeeRepo.findById(id);
     }
 
-    public Flux<Employee> findByRole(String role){
+    public Flux<Employees> findByRole(String role){
         return employeeRepo.findAll().filter(v -> {
            return v.getRole().equals(role);
         });
     }
 
-    public Flux<Employee> findByLicense(String license){
+    public Flux<Employees> findByLicense(String license){
         return employeeRepo
                 .findAll()
                 .filter(v->{
@@ -46,7 +46,7 @@ public class EmployeeService {
         });
     }
 
-    public Flux<Employee> findByVisa(String visa){
+    public Flux<Employees> findByVisa(String visa){
         return employeeRepo
                 .findAll()
                 .filter(v->{
@@ -56,9 +56,9 @@ public class EmployeeService {
                     return v.getVisas().contains(visa);
                 });
     }
-    public Flux<Employee> findByCountryOfOrigin(String country){
+    public Flux<Employees> findByCountryOfOrigin(String country){
         return employeeRepo.findAll().filter(v->{
-            return v.getCountryOfOrigin().equals(country);
+            return v.getCountryoforigin().equals(country);
         });
     }
 }
