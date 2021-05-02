@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.sql.Time;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +24,62 @@ public class Flights {
     private String startCity;
     private String endCity;
     private Integer passengersAmount;
+    private List<Integer> seatsNumbers;
+    private List<String> seatsFullNames;
+
+    public Flights(Long id, String flightName, String planeId, String prevFlightName, Time startTime, Time endTime, String planeModel, String startCountry, String endCountry, String startCity, String endCity, Integer passengersAmount, List<Integer> seatsNumbers, List<String> seatsFullNames, List<Long> personnelIds, List<Long> baggageIds) {
+        this.id = id;
+        this.flightName = flightName;
+        this.planeId = planeId;
+        this.prevFlightName = prevFlightName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.planeModel = planeModel;
+        this.startCountry = startCountry;
+        this.endCountry = endCountry;
+        this.startCity = startCity;
+        this.endCity = endCity;
+        this.passengersAmount = passengersAmount;
+        this.seatsNumbers = seatsNumbers;
+        this.seatsFullNames = seatsFullNames;
+        this.personnelIds = personnelIds;
+        this.baggageIds = baggageIds;
+    }
+
+    public List<Integer> getSeatsNumbers() {
+        return seatsNumbers;
+    }
+
+    public void setSeatsNumbers(List<Integer> seatsNumbers) {
+        this.seatsNumbers = seatsNumbers;
+    }
+
+    public List<String> getSeatsFullNames() {
+        return seatsFullNames;
+    }
+
+    public void setSeatsFullNames(List<String> seatsFullNames) {
+        this.seatsFullNames = seatsFullNames;
+    }
+
+    public List<Long> getPersonnelIds() {
+        return personnelIds;
+    }
+
+    public void setPersonnelIds(List<Long> personnelIds) {
+        this.personnelIds = personnelIds;
+    }
+
+    public List<Long> getBaggageIds() {
+        return baggageIds;
+    }
+
+    public void setBaggageIds(List<Long> baggageIds) {
+        this.baggageIds = baggageIds;
+    }
+
+    private List<Long> personnelIds;
+    private List<Long> baggageIds;
 
     public Long getId() {
         return id;
@@ -120,18 +177,5 @@ public class Flights {
         this.passengersAmount = passengersAmount;
     }
 
-    public Flights(Long id, String flightName, String planeId, String prevFlightName, Time startTime, Time endTime, String planeModel, String startCountry, String endCountry, String startCity, String endCity, Integer passengersAmount) {
-        this.id = id;
-        this.flightName = flightName;
-        this.planeId = planeId;
-        this.prevFlightName = prevFlightName;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.planeModel = planeModel;
-        this.startCountry = startCountry;
-        this.endCountry = endCountry;
-        this.startCity = startCity;
-        this.endCity = endCity;
-        this.passengersAmount = passengersAmount;
-    }
+
 }

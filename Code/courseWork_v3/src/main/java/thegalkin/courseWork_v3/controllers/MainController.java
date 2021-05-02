@@ -24,7 +24,7 @@ public class MainController {
         this.employeeService = employeeService;
     }
 
-    @RequestMapping("/findByCities")
+    @PostMapping("/findByCities")
     public Flux<Flights> findByCities(
             @RequestParam String startCity,
             @RequestParam String endCity
@@ -32,14 +32,14 @@ public class MainController {
         return flightService.findByCities(startCity, endCity);
     }
 
-    @RequestMapping("/findByDate")
+    @PostMapping("/findByDate")
     public Flux<Flights> findByDate(
             @RequestParam Date date //Dragons be here: возможна несовместимость даты из свифта и Джавы
     ) {
         return flightService.findByDate(date);
     }
 
-    @RequestMapping("/findByCountryRoute")
+    @PostMapping("/findByCountryRoute")
     public Flux<Flights> findByCountryRoute(
             @RequestParam String startCountry,
             @RequestParam String endCountry
@@ -57,35 +57,42 @@ public class MainController {
         return employeeService.listAll();
     }
 
-    @RequestMapping("/findEmployeeById")
+    @PostMapping("/findEmployeeById")
     public Mono<Employees> findEmployeeById(
             @RequestParam Long id
     ) {
         return employeeService.getById(id);
     }
 
-    @RequestMapping("/findEmployeeByRole")
+    @PostMapping("findFlightById")
+    public Mono<Flights> findFlightById(
+            @RequestParam Long id
+    ){
+        return flightService.findById(id);
+    }
+
+    @PostMapping("/findEmployeeByRole")
     public Flux<Employees> findEmployeeByRole(
             @RequestParam String role
     ) {
         return employeeService.findByRole(role);
     }
 
-    @RequestMapping("/findByLicense")
+    @PostMapping("/findByLicense")
     public Flux<Employees> findByLicense(
             @RequestParam String license
     ) {
         return employeeService.findByLicense(license);
     }
 
-    @RequestMapping("/findByVisa")
+    @PostMapping("/findByVisa")
     public Flux<Employees> findByVisa(
             @RequestParam String visa
     ) {
         return employeeService.findByVisa(visa);
     }
 
-    @RequestMapping("/findByCountryOfOrigin")
+    @PostMapping("/findByCountryOfOrigin")
     public Flux<Employees> findByCountryOfOrigin(
             @RequestParam String country
     ) {
@@ -94,19 +101,16 @@ public class MainController {
 
     @PostMapping("/addEmployee")
     public Mono<Employees> addEmployee(
-//            @RequestParam Long id,
-//            @RequestParam String name,
-//            @RequestParam String secondName,
-//            @RequestParam String lastName,
-//            @RequestParam List<String>licenses,
-//            @RequestParam String role,
-//            @RequestParam String countryOfOrigin,
-//            @RequestParam List<String> visas
             @RequestBody Employees newEmployee
-    ) {
-//        Employees newEmployee = new Employees(id,name,secondName,lastName,licenses,role,countryOfOrigin,visas);
+    ){
+            return employeeService.addNew(newEmployee);
+    }
 
-        return employeeService.addNew(newEmployee);
+    @PostMapping("/addFlight")
+    public Mono<Flights> addFlight(
+            @RequestBody Flights flights
+    ){
+            return flightService.addNew(flights);
     }
 
     @RequestMapping("/listAll")

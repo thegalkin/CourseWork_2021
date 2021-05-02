@@ -37,6 +37,9 @@ public class FlightService {
         );
     }
 
+    public Mono<Flights> findById(Long id){
+        return flightRepo.findById(id);
+    }
     public Flux<Flights> findByCountries(String startCountry, String endCountry){
         return flightRepo.findAll().filter(v->{
             return v.getStartCountry().equals(startCountry) && v.getEndCountry().equals(endCountry);
