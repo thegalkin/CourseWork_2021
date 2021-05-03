@@ -7,7 +7,9 @@ import reactor.core.publisher.Mono;
 import thegalkin.courseWork_v3.domain.Baggage;
 import thegalkin.courseWork_v3.domain.Employees;
 import thegalkin.courseWork_v3.domain.Flights;
+import thegalkin.courseWork_v3.domain.Planes;
 import thegalkin.courseWork_v3.repo.BaggageRepo;
+import thegalkin.courseWork_v3.repo.PlanesRepo;
 import thegalkin.courseWork_v3.service.EmployeeService;
 import thegalkin.courseWork_v3.service.FlightService;
 
@@ -20,31 +22,33 @@ public class MainController {
     private final EmployeeService employeeService;
 
     private final BaggageRepo baggageRepo;
+    private final PlanesRepo planesRepo;
 
     @Autowired
-    public MainController(FlightService flightService, EmployeeService employeeService, BaggageRepo baggageRepo) {
+    public MainController(FlightService flightService, EmployeeService employeeService, BaggageRepo baggageRepo, PlanesRepo planesRepo) {
         this.flightService = flightService;
         this.employeeService = employeeService;
         this.baggageRepo = baggageRepo;
+        this.planesRepo = planesRepo;
     }
 
-    @GetMapping("/findByCities")
-    public Flux<Flights> findByCities(
+    @GetMapping("/findFlightByCities")
+    public Flux<Flights> findFlightByCities(
             @RequestParam String startCity,
             @RequestParam String endCity
     ) {
         return flightService.findByCities(startCity, endCity);
     }
 
-    @GetMapping("/findByDate")
-    public Flux<Flights> findByDate(
+    @GetMapping("/findFlightByDate")
+    public Flux<Flights> findFlightByDate(
             @RequestParam Date date //Dragons be here: возможна несовместимость даты из свифта и Джавы
     ) {
         return flightService.findByDate(date);
     }
 
-    @GetMapping("/findByCountryRoute")
-    public Flux<Flights> findByCountryRoute(
+    @GetMapping("/findFlightByCountryRoute")
+    public Flux<Flights> findFlightByCountryRoute(
             @RequestParam String startCountry,
             @RequestParam String endCountry
     ) {
@@ -82,22 +86,22 @@ public class MainController {
         return employeeService.findByRole(role);
     }
 
-    @GetMapping("/findByLicense")
-    public Flux<Employees> findByLicense(
+    @GetMapping("/findEmployeeByLicense")
+    public Flux<Employees> findEmployeeByLicense(
             @RequestParam String license
     ) {
         return employeeService.findByLicense(license);
     }
 
-    @GetMapping("/findByVisa")
-    public Flux<Employees> findByVisa(
+    @GetMapping("/findEmployeeByVisa")
+    public Flux<Employees> findEmployeeByVisa(
             @RequestParam String visa
     ) {
         return employeeService.findByVisa(visa);
     }
 
-    @GetMapping("/findByCountryOfOrigin")
-    public Flux<Employees> findByCountryOfOrigin(
+    @GetMapping("/findEmployeeByCountryOfOrigin")
+    public Flux<Employees> findEmployeeByCountryOfOrigin(
             @RequestParam String country
     ) {
         return employeeService.findByCountryOfOrigin(country);
@@ -121,6 +125,12 @@ public class MainController {
 
 
 //    Новый подход к общению с базой минуя сервисный слой
+//    Оформление багажа
+
+/**    Если требуется изменить параметры багажа, то необходимо его пересоздать
+        Наблюдал такой поиход в аэропротах.
+ */
+
     @RequestMapping("/listAllBaggage")
     public Flux<Baggage> listAllBaggage(){
         return baggageRepo.findAll();
@@ -170,6 +180,80 @@ public class MainController {
         }
     }
 
+
+
+
+
+    //Управление самолетами
+    @PostMapping("/addPlane")
+    public Mono<Planes> addPlane(@RequestBody Planes plane){
+        return planesRepo.save(plane);
+    }
+
+    @GetMapping("/listAllPlanes")
+    public Flux<Planes> listAllPlanes(){
+        return planesRepo.findAll();
+    }
+
+    @GetMapping("/findPlanesByInternationalNumber")
+    public Mono<Planes> findPlanesByInternationalNumber(@RequestParam String number){
+        return planesRepo.findPlanesByInternationalNumber(number);
+    }
+
+    @GetMapping("/findPlanesByRussianNumber")
+    public Mono<Planes> findPlanesByRussianNumber(String russianNumber){
+        return planesRepo.findPlanesByRussianNumber(russianNumber);
+    }
+
+    @GetMapping("/findPlanesByBoardName")
+    public Mono<Planes> findPlanesByBoardName(String boardName){
+        return planesRepo.findPlanesByBoardName(boardName);
+    }
+
+    @GetMapping("/findPlanesByModel")
+    public Mono<Planes> findPlanesByModel(String model){
+        return planesRepo.findPlanesByModel(model);
+    }
+
+    @GetMapping("/findPlanesByRepairHistory")
+    public Mono<Planes> findPlanesByRepairHistory(String repairIncident){
+        return planesRepo.findPlanesByRepairHistory(repairIncident);
+    }
+
+    @GetMapping("/findPlanesByOwnerCompany")
+    public Mono<Planes> findPlanesByOwnerCompany(String company){
+        return planesRepo.findPlanesByOwnerCompany(company);
+    }
+
+    @GetMapping("/findPlanesByHumanCapacity")
+    public Mono<Planes> findPlanesByHumanCapacity(Integer humanCapacity){
+        return planesRepo.findPlanesByHumanCapacity(humanCapacity);
+    }
+
+    @GetMapping("/findPlanesByPersonnelCapacity")
+    public Mono<Planes> findPlanesByPersonnelCapacity(Integer personnelCapacity){
+        return planesRepo.findPlanesByPersonnelCapacity(personnelCapacity);
+    }
+
+    @GetMapping("/findPlanesByBaggageCapacity")
+    public Mono<Planes> findPlanesByBaggageCapacity(Integer baggageCapacity){
+        return  planesRepo.findPlanesByBaggageCapacity(baggageCapacity);
+    }
+
+    @GetMapping("/findPlanesByFlightHistoryId")
+    public Mono<Planes> findPlanesByFlightHistoryId(Long flightID){
+        return planesRepo.findPlanesByFlightHistoryId(flightID);
+    }
+
+    @DeleteMapping("/deletePlaneById")
+    public Flux<Planes> deletePlaneById(Long id){
+        try {
+            planesRepo.deleteById(id);
+            return planesRepo.findAll();
+        } catch (Exception e){
+            return Flux.empty();
+        }
+    }
 
 
 }
