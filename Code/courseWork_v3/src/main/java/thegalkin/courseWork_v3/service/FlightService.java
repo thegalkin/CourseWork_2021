@@ -50,4 +50,12 @@ public class FlightService {
         return flightRepo.save(flight);
     }
 
+    public Flux<Flights> deleteFlightById(Long id){
+        try{
+            flightRepo.deleteById(id).block();
+            return flightRepo.findAll();
+        } catch (Exception e){
+            return Flux.empty();
+        }
+    }
 }

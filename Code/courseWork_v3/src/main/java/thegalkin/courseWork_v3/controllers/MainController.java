@@ -32,6 +32,35 @@ public class MainController {
         this.planesRepo = planesRepo;
     }
 
+//  Работа с рейсами
+
+    /**
+
+     Тут и у сотрудников еще используется сервисный подход, от которого я отказался,
+     поскольку проект, очевино, краткосрочный, и проще написать через интерфейсы
+     Да и в целом, особо сложной логики у меня не используется на функциях, соответственно,
+     сликом massive controller я вряд ли получил бы.
+     */
+
+    @PostMapping("/addFlight")
+    public Mono<Flights> addFlight(
+            @RequestBody Flights flights
+    ){
+        return flightService.addNew(flights);
+    }
+
+    @RequestMapping("/listAllFlights")
+    public Flux<Flights> listAllFlights() {
+        return flightService.listAll();
+    }
+
+    @GetMapping("findFlightById")
+    public Mono<Flights> findFlightById(
+            @RequestParam Long id
+    ){
+        return flightService.findById(id);
+    }
+
     @GetMapping("/findFlightByCities")
     public Flux<Flights> findFlightByCities(
             @RequestParam String startCity,
@@ -55,10 +84,12 @@ public class MainController {
         return flightService.findByCountries(startCountry, endCountry);
     }
 
-    @RequestMapping("/listAllFlights")
-    public Flux<Flights> listAllFlights() {
-        return flightService.listAll();
+    @DeleteMapping("/deleteFlightById")
+    public Flux<Flights> deleteFlightById(@RequestParam Long id){
+        return deleteFlightById(id);
     }
+
+//  Работа с сотрудниками
 
     @RequestMapping("/listAllEmployees")
     public Flux<Employees> listAllEmployees() {
@@ -70,13 +101,6 @@ public class MainController {
             @RequestParam Long id
     ) {
         return employeeService.getById(id);
-    }
-
-    @GetMapping("findFlightById")
-    public Mono<Flights> findFlightById(
-            @RequestParam Long id
-    ){
-        return flightService.findById(id);
     }
 
     @GetMapping("/findEmployeeByRole")
@@ -114,12 +138,12 @@ public class MainController {
             return employeeService.addNew(newEmployee);
     }
 
-    @PostMapping("/addFlight")
-    public Mono<Flights> addFlight(
-            @RequestBody Flights flights
-    ){
-            return flightService.addNew(flights);
+    @DeleteMapping("/deleteEmployeeById")
+    public Flux<Employees> deleteEmployeeById(Long id){
+        return employeeService.deleteEmployeeById(id);
     }
+
+
 
 
 
@@ -248,7 +272,7 @@ public class MainController {
     @DeleteMapping("/deletePlaneById")
     public Flux<Planes> deletePlaneById(Long id){
         try {
-            planesRepo.deleteById(id);
+            planesRepo.deleteById(id).block();
             return planesRepo.findAll();
         } catch (Exception e){
             return Flux.empty();

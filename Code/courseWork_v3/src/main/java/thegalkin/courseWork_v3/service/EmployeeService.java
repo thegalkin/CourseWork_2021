@@ -61,4 +61,13 @@ public class EmployeeService {
             return v.getCountryoforigin().equals(country);
         });
     }
+
+    public Flux<Employees> deleteEmployeeById(Long id){
+        try{
+            employeeRepo.deleteById(id).block();
+            return employeeRepo.findAll();
+        }catch (Exception e){
+            return Flux.empty();
+        }
+    }
 }

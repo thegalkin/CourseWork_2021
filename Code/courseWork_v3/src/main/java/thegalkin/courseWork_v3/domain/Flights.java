@@ -26,6 +26,8 @@ public class Flights {
     private Integer passengersAmount;
     private List<Integer> seatsNumbers;
     private List<String> seatsFullNames;
+    private List<Long> personnelIds;
+    private List<Long> baggageIds;
 
     public Flights(Long id, String flightName, String planeId, String prevFlightName, Time startTime, Time endTime, String planeModel, String startCountry, String endCountry, String startCity, String endCity, Integer passengersAmount, List<Integer> seatsNumbers, List<String> seatsFullNames, List<Long> personnelIds, List<Long> baggageIds) {
         this.id = id;
@@ -78,8 +80,7 @@ public class Flights {
         this.baggageIds = baggageIds;
     }
 
-    private List<Long> personnelIds;
-    private List<Long> baggageIds;
+
 
     public Long getId() {
         return id;
