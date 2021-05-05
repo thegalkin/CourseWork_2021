@@ -225,52 +225,52 @@ public class MainController {
     }
 
     @GetMapping("/findPlanesByRussianNumber")
-    public Mono<Planes> findPlanesByRussianNumber(String russianNumber){
+    public Mono<Planes> findPlanesByRussianNumber(@RequestParam String russianNumber){
         return planesRepo.findPlanesByRussianNumber(russianNumber);
     }
 
     @GetMapping("/findPlanesByBoardName")
-    public Mono<Planes> findPlanesByBoardName(String boardName){
+    public Mono<Planes> findPlanesByBoardName(@RequestParam String boardName){
         return planesRepo.findPlanesByBoardName(boardName);
     }
 
     @GetMapping("/findPlanesByModel")
-    public Mono<Planes> findPlanesByModel(String model){
+    public Flux<Planes> findPlanesByModel(@RequestParam String model){
         return planesRepo.findPlanesByModel(model);
     }
 
     @GetMapping("/findPlanesByRepairHistory")
-    public Mono<Planes> findPlanesByRepairHistory(String repairIncident){
+    public Flux<Planes> findPlanesByRepairHistory(@RequestParam String repairIncident){
         return planesRepo.findPlanesByRepairHistory(repairIncident);
     }
 
     @GetMapping("/findPlanesByOwnerCompany")
-    public Mono<Planes> findPlanesByOwnerCompany(String company){
+    public Flux<Planes> findPlanesByOwnerCompany(@RequestParam String company){
         return planesRepo.findPlanesByOwnerCompany(company);
     }
 
     @GetMapping("/findPlanesByHumanCapacity")
-    public Mono<Planes> findPlanesByHumanCapacity(Integer humanCapacity){
+    public Flux<Planes> findPlanesByHumanCapacity(@RequestParam Integer humanCapacity){
         return planesRepo.findPlanesByHumanCapacity(humanCapacity);
     }
 
     @GetMapping("/findPlanesByPersonnelCapacity")
-    public Mono<Planes> findPlanesByPersonnelCapacity(Integer personnelCapacity){
+    public Flux<Planes> findPlanesByPersonnelCapacity(@RequestParam Integer personnelCapacity){
         return planesRepo.findPlanesByPersonnelCapacity(personnelCapacity);
     }
 
     @GetMapping("/findPlanesByBaggageCapacity")
-    public Mono<Planes> findPlanesByBaggageCapacity(Integer baggageCapacity){
+    public Flux<Planes> findPlanesByBaggageCapacity(@RequestParam Integer baggageCapacity){
         return  planesRepo.findPlanesByBaggageCapacity(baggageCapacity);
     }
 
     @GetMapping("/findPlanesByFlightHistoryId")
-    public Mono<Planes> findPlanesByFlightHistoryId(Long flightID){
+    public Mono<Planes> findPlanesByFlightHistoryId(@RequestParam Long flightID){
         return planesRepo.findPlanesByFlightHistoryId(flightID);
     }
 
     @DeleteMapping("/deletePlaneById")
-    public Flux<Planes> deletePlaneById(Long id){
+    public Flux<Planes> deletePlaneById(@RequestParam Long id){
         try {
             planesRepo.deleteById(id).block();
             return planesRepo.findAll();
