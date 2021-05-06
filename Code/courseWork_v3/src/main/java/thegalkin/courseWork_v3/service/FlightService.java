@@ -7,7 +7,10 @@ import reactor.core.publisher.Mono;
 import thegalkin.courseWork_v3.domain.Flights;
 import thegalkin.courseWork_v3.repo.FlightRepo;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightService {
@@ -56,6 +59,43 @@ public class FlightService {
             return flightRepo.findAll();
         } catch (Exception e){
             return Flux.empty();
+        }
+    }
+
+    public Flux<Boolean> listAllSeats(Long flightId){
+//        если место занято - вернет false, если свободно - true
+        return  Flux
+                .fromIterable(
+                        flightRepo
+                                .findAll()
+                                .toStream()
+                                .map(
+                                v-> v.getSeatsFullNames().isEmpty()
+                                )
+                                .collect(Collectors.toList())
+        );
+    }
+
+    public Mono<Boolean> initialTickerReservation(Long flightId, List<Integer> ticketPlacesList){
+        //если рейс существует, то
+        if (!flightRepo.findById(flightId).equals(Mono.empty())){
+            for (int i = 0; i < ticketPlacesList.stream().count(); i++) {
+                final int j = i;
+                if (flightRepo.findAll().map(v->
+                        v.getSeatsFullNames()
+                                .get(ticketPlacesList.get(j)).equals("")).toStream().allMatch(s->s.equals(true))){
+                    return Mono.just(false);
+                }
+            }
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.MINUTE, 20);
+            for (int i = 0; i < ticketPlacesList.stream().count(); i++) {
+                flightRepo.updateSeatsFullName(ticketPlacesList.get(i), date.toString());
+            }
+
+            return Mono.just(true);
+        }else{
+            return Mono.just(false);
         }
     }
 }
