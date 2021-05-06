@@ -7,6 +7,10 @@ import reactor.core.publisher.Mono;
 import thegalkin.courseWork_v3.domain.Flights;
 import thegalkin.courseWork_v3.repo.FlightRepo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -76,21 +80,40 @@ public class FlightService {
         );
     }
 
-    public Mono<Boolean> initialTickerReservation(Long flightId, List<Integer> ticketPlacesList){
+    public Mono<Boolean> initialTicketReservation(Long flightId, List<Integer> ticketPlacesList){
         //если рейс существует, то
         if (!flightRepo.findById(flightId).equals(Mono.empty())){
             for (int i = 0; i < ticketPlacesList.stream().count(); i++) {
                 final int j = i;
-                if (flightRepo.findAll().map(v->
-                        v.getSeatsFullNames()
-                                .get(ticketPlacesList.get(j)).equals("")).toStream().allMatch(s->s.equals(true))){
+                if (flightRepo.getAllSeatFullNamesFromFlights().get(ticketPlacesList.get(j)).equals("")){
                     return Mono.just(false);
                 }
             }
-            Calendar date = Calendar.getInstance();
-            date.add(Calendar.MINUTE, 20);
+            LocalTime date = LocalTime.now().plusMinutes(20);
             for (int i = 0; i < ticketPlacesList.stream().count(); i++) {
                 flightRepo.updateSeatsFullName(ticketPlacesList.get(i), date.toString());
+            }
+
+            return Mono.just(true);
+        }else{
+            return Mono.just(false);
+        }
+    }
+
+    public Mono<Boolean> finalTicketReservation(Long flightId, List<Integer> ticketPlacesList, String passangerFullName, String email){
+        //если рейс существует, то
+        if (!flightRepo.findById(flightId).equals(Mono.empty())){
+            for (int i = 0; i < ticketPlacesList.stream().count(); i++) {
+                final int j = i;
+                String getj = flightRepo.getAllSeatFullNamesFromFlights().get(ticketPlacesList.get(j));
+                if (!getj.equals("") || LocalTime.parse(getj).isBefore(LocalTime.now())){
+                    return Mono.just(false);
+                }
+
+            }
+
+            for (int i = 0; i < ticketPlacesList.stream().count(); i++) {
+                flightRepo.updateSeatsFullName(ticketPlacesList.get(i), passangerFullName);
             }
 
             return Mono.just(true);

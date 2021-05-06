@@ -14,6 +14,7 @@ import thegalkin.courseWork_v3.service.EmployeeService;
 import thegalkin.courseWork_v3.service.FlightService;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -88,6 +89,24 @@ public class MainController {
     public Flux<Flights> deleteFlightById(@RequestParam Long id){
         return deleteFlightById(id);
     }
+
+    @GetMapping("/listAllSeatsStatus")
+    public Flux<Boolean> listAllSeatsStatus(@RequestParam Long flightId){
+        return flightService.listAllSeats(flightId);
+    }
+
+    @PostMapping("/reserveSeatsBeforePayment")
+    public Mono<Boolean> reserveSeatsBeforePayment(
+            @RequestParam Long flightId,
+            @RequestParam List<Integer> seats
+    ){
+        return flightService.initialTicketReservation(flightId, seats);
+    }
+
+
+
+
+
 
 //  Работа с сотрудниками
 
